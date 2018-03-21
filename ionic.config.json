@@ -1,15 +1,8 @@
 {
-  "name": "dash",
+  "name": "githubIonic",
   "app_id": "3b971647",
-  "type": "ionic1",
+  "type": "ionic-angular",
   "integrations": {
-    "gulp": {},
     "cordova": {}
-  },
-  "watchPatterns": [
-    "scss/**/*",
-    "www/**/*",
-    "!www/lib/**/*",
-    "!www/**/*.map"
-  ]
+  }
 }
