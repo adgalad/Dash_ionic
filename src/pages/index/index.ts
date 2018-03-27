@@ -12,7 +12,10 @@ import { Component } from '@angular/core';
 })
 export class IndexPage {
 
-
+  local(item){
+    console.log(item, localStorage.getItem(item))
+    return localStorage.getItem(item)
+  }
   constructor() {
   }
 

@@ -1,10 +1,12 @@
-import { Component, ViewChild, Injectable } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 
 import { Platform, MenuController, Nav } from 'ionic-angular';
 
-import { HelloIonicPage } from '../pages/hello-ionic/hello-ionic';
-import { ListPage } from '../pages/list/list';
-import { Prueba } from '../pages/prueba/prueba';
+import { LoginPage } from '../pages/login/login';
+import { StampPage } from '../pages/stamp/stamp';
+import { ActivatePage } from '../pages/activate/activate';
+import { SignupPage } from '../pages/signup/signup';
+import { ProfilePage } from '../pages/profile/profile';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -19,8 +21,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
-  // make HelloIonicPage the root (or first) page
-  rootPage = HelloIonicPage;
+  // make LoginPage the root (or first) page
+  rootPage = LoginPage;
 
 
   pages: any
@@ -36,33 +38,40 @@ export class MyApp {
   ) {
     this.initializeApp();
     // set our app's pages
-    this.pages = {
-      "login": { title: 'Hello Ionic', component: HelloIonicPage },
-      "index": { title: 'My First List', component: ListPage },
-      "prueba": { title: 'Prueba', component: Prueba}
-    };
+    this.pages.login = { title: 'Mi Pasaporte', component: LoginPage }
+    this.pages.profile = { title: 'Perfil', component: ProfilePage }
+    if (this.isAmbassador()) {
+      this.pages.stamp = { title: 'Colocar Sellos', component: StampPage}
+      this.pages.activate = { title: 'Activar pasaporte', component: ActivatePage}
+    }
+  }
+
+  isAmbassador(){
+    return parseInt(localStorage.getItem("type")) === 2;
   }
 
   initializeApp() {
     this.platform.ready().then(() => {
-      // Okay, so the platform is ready and our plugins are available.
-      // Here you can do any higher level native things you might need.
       this.statusBar.styleDefault();
       this.splashScreen.hide();
     });
   }
 
   openPage(url) {
-    // close the menu when clicking a link from the menu
     this.menu.close();
-    // navigate to the new page if it is not the current page
     this.nav.setRoot(this.pages[url].component);
   }
 
   logout(){
     this.menu.close();
-    localStorage.setItem('email', "-1");
-    localStorage.setItem('password', "-1");
-    this.nav.setRoot(HelloIonicPage); 
+    localStorage.removeItem('token');
+    localStorage.removeItem('email');
+    localStorage.removeItem('password');
+    localStorage.removeItem('firstName');
+    localStorage.removeItem('lastName');
+    localStorage.removeItem('id');
+    localStorage.removeItem('type');
+    
+    this.nav.setRoot(LoginPage); 
   }
 }
