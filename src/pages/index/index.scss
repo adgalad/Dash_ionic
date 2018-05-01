@@ -1,32 +1,7 @@
-index {
-
-  // .center {
-  //   text-align: center;
-  //   position:relative;
-  // }
-
-  // .title {
-  //    top:30%; 
-  //    right:3%
-  // }
-
-  table, th, td {
-    border: 1px solid black;
-    // width: 90%;
-    // height: 90%;
-    max-width: 80vh;
-  }
-
-  td {
-      width: 10vh;
-      height: 10vh;
-  }
-
-  /* resize images */
-
-  img {
-    width:90%;
-    height:90%;
-    background: transparent !important;
+page-index {
+  .firstDiv {
+    display: table;
+    width: 100%;
+    height: 100%;
   }
 }

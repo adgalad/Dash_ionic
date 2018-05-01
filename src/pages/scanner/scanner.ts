@@ -1,9 +1,12 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, ViewEncapsulation } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { QRScanner, QRScannerStatus } from '@ionic-native/qr-scanner';
 import { Camera } from '@ionic-native/camera';
 import { Navbar } from 'ionic-angular';
-
+import { Platform } from 'ionic-angular';
+// import {QrScannerComponent} from './scanner.module'
+import {QrScannerComponent} from 'angular2-qrscanner';
+ 
 
 const Operation = {
   Passport: 0,
@@ -14,15 +17,19 @@ const Operation = {
 @Component({
   selector: 'page-scanner',
   templateUrl: 'scanner.html',
-  providers: [Camera, QRScanner]
+  providers: [Camera, QRScanner],
+  encapsulation: ViewEncapsulation.None
 })
 export class ScannerPage {
   @ViewChild(Navbar) navBar: Navbar;
+  @ViewChild(QrScannerComponent) qrScannerComponent: QrScannerComponent ;
+ 
   scanSub: any; // scanner component
   operation: any;
   constructor( public navCtrl: NavController,
                public navParams: NavParams,
-               private qrScanner: QRScanner) {
+               private qrScanner: QRScanner,
+               public platform: Platform) {
     if (navParams.get('operation') === "scanPassport"){
       this.operation = Operation.Passport
     } else if (navParams.get('operation') === "scanProduct"){
@@ -31,21 +38,105 @@ export class ScannerPage {
   }
 
 
+  isCordova(){
+    return this.platform.is("mobile") && !this.platform.is('mobileweb');
+  }
 
   ionViewDidLoad() {
     this.navBar.backButtonClick = (e:UIEvent)=>{
-     this.stopScan() // The scanned is stopped when the "Back" button is pressed
+      if (this.isCordova()) {
+          this.mobileStopScan() // The scanned is stopped when the "Back" button is pressed
+      } else {
+          this.webStopScan()
+      }
+     
     }
-    this.startScan()
+    
+
+    if (this.isCordova()) {
+      this.mobileStartScan()
+    } else {
+      this.webStartScan()
+    }
+
+    
   }
 
-  stopScan(){
+  webStartScan(){
+    this.qrScannerComponent.getMediaDevices().then(devices => {
+      console.log(devices);
+      const videoDevices: MediaDeviceInfo[] = [];
+      for (const device of devices) {
+          if (device.kind.toString() === 'videoinput') {
+              videoDevices.push(device);
+          }
+      }
+      if (videoDevices.length > 0){
+        let choosenDev;
+        for (const dev of videoDevices){
+          if (dev.label.includes('front')){
+            choosenDev = dev;
+            break;
+          }
+        }
+        if (choosenDev) {
+            this.qrScannerComponent.chooseCamera.next(choosenDev);
+        } else {
+            this.qrScannerComponent.chooseCamera.next(videoDevices[0]);
+        }
+      }
+    });
+
+    this.qrScannerComponent.capturedQr.subscribe(text => {
+        switch (this.operation) {
+                case Operation.Passport:
+                  try{
+                    var data = JSON.parse(text);
+
+                    if (!data.passportID || !data.lastName || !data.firstName || !data.id || !data.event_id){
+                      this.webStartScan()
+                      alert("QR invalido. Porfavor escanee un QR valido");
+                    } else {
+                      localStorage.setItem("qrInfo", JSON.stringify(data)) 
+                      this.webStopScan();
+                    }
+                  } catch(e) {
+                    this.webStartScan()
+                    console.log(e)
+                    alert("QR no es un JSON valido. Porfavor escanee un QR valido");
+                  }
+                  break;
+                case Operation.Product:
+                  if (true){
+                    // localStorage.setItem("qrInfo", JSON.stringify(data)) 
+                    alert(text)
+                    this.webStopScan();
+                  } 
+                  //else {
+                  //   this.startScan()
+                  //   alert("QR invalido. Porfavor escanee un QR valido");
+                  // }
+                  break;
+                default:
+                  alert("@scanner.ts: swith to default case")
+                  break;
+               }
+    });
+  }
+
+  webStopScan(){
+    this.qrScannerComponent.stopScanning()
+    this.qrScannerComponent.capturedQr.unsubscribe()
+    this.navCtrl.pop();
+  }
+
+  mobileStopScan(){
     this.qrScanner.hide(); // hide camera preview
     this.scanSub.unsubscribe(); // stop scanning
     this.navCtrl.pop();
   }
 
-  startScan(){
+  mobileStartScan(){
     // Optionally request the permission early
     this.qrScanner.prepare()
       .then((status: QRScannerStatus) => {
@@ -59,23 +150,23 @@ export class ScannerPage {
                 case Operation.Passport:
                   try{
                     var data = JSON.parse(text);
-                    if (data.passportID !== undefined){
-                      localStorage.setItem("passportID", data.passportID) 
-                      this.stopScan();
+                    if (!data.passportID || !data.lastName || !data.firstName || !data.id || !data.event_id){
+                      this.mobileStartScan()
+                      alert("QR invalido. Porfavor escanee un QR valido (1)");
                     } else {
-                      this.startScan()
-                      alert("QR invalido. Porfavor escanee un QR valido");
+                      localStorage.setItem("qrInfo", JSON.stringify(data)) 
+                      this.mobileStopScan();
                     }
                   } catch(e) {
-                    this.startScan()
-                    alert("QR invalido. Porfavor escanee un QR valido");
+                    this.mobileStartScan()
+                    alert("QR no es un JSON valido. Porfavor escanee un QR valido");
                   }
                   break;
                 case Operation.Product:
                   if (true){
-                    // localStorage.setItem("passportID", JSON.stringify(data)) 
+                    // localStorage.setItem("qrInfo", JSON.stringify(data)) 
                     alert(text)
-                    this.stopScan();
+                    this.mobileStopScan();
                   } 
                   //else {
                   //   this.startScan()
@@ -97,7 +188,7 @@ export class ScannerPage {
           .then((data : QRScannerStatus)=> {
             
           },err => {
-            alert(err);
+            alert("No se pudo conectar al servidor")
 
           });
 

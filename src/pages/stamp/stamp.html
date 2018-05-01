@@ -5,70 +5,62 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-  <ion-navbar>
+  <ion-navbar class="title-dash">
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title class="center title">
-      Colocar Sellos
     </ion-title>
   </ion-navbar>
 </ion-header>
 
 
 <ion-content class="content" scroll="true" overflow-scroll="true">
-    <div class="container" style="position:absolute; left: 10%; top:30px;  width:80%">
-      <div id="request-form">
-        <button class="button" ion-button (click)="goToScanner('scanPassport')">
-          <ion-icon name="qr-scanner"> &nbsp; &nbsp; </ion-icon> Escanear pasaporte
-        </button>
-        <br><br>
-        <ion-item>    
-            <ion-label stacked>ID del  pasaporte</ion-label> 
-            <ion-input type="text" placeholder="0x00123" [(ngModel)]="requestInfo.passportID" disabled="true" name="bigStamp"></ion-input>
-        </ion-item>
-        <br><br>
-        <button class="button" ion-button (click)="goToScanner('scanProduct')">
-          <ion-icon name="qr-scanner"> &nbsp; &nbsp; </ion-icon> Escanear producto
-        </button>
-        <br><br>
-        <form (ngSubmit)="sendStampsRequest()">
-          <h5>Emprendedor</h5>
-          <ion-item>
-            <ion-select class="select" interface="popover" style="width: 100%" width="100%" >
-              <ion-option selected>Guarapita El Gran Varón</ion-option>
-              <ion-option>BurgerManía</ion-option>
-              <ion-option>Woufles</ion-option>
-              <ion-option>Cocotento</ion-option>
-              <ion-option>Chiringuitos</ion-option>
-              <ion-option>Cerveza Viking Sur</ion-option>
-              <ion-option>Pixie Liquors</ion-option>
-              <ion-option>Restaurante Viejo Puente</ion-option>
-              <ion-option>Be Nuts</ion-option>
-              <ion-option>Chocolate Digatti</ion-option>
-            </ion-select>
-          </ion-item>
-          <h5>Sellos</h5>
-          <ion-item>    
-            <ion-label stacked>Grandes</ion-label>
-            <ion-input placeholder="0" type="number" min=0 max=10 [(ngModel)]= "requestInfo.bigStamps" name="bigStamps"></ion-input>
-          </ion-item>
-          <ion-item>    
-            <ion-label stacked>Pequeños</ion-label>
-            <ion-input placeholder="0" type="number" min=0 max=10 [(ngModel)]= "requestInfo.smallStamps" name="smallStamps"></ion-input>
-          </ion-item>
-          <ion-item>    
-            <ion-label stacked>Donaciones</ion-label>
-            <ion-input placeholder="0" type="number" min=0 max=10 [(ngModel)]= "requestInfo.heartStamps" name="heartStamps"></ion-input>
-          </ion-item>
-          <ion-item>    
-            <ion-label stacked>Redes Sociales</ion-label>
-            <ion-toggle [(ngModel)]="requestInfo.socialStamps" name="socialStamps"></ion-toggle>
-          </ion-item>
-          <br>
-          <button ion-button type="submit" [disabled]="!true">Colocar Sellos</button>
-        </form>
-      </div>
-    </div>
+
+  <div class="container" style="position:absolute; left: 10%; top:30px;  width:80%">
+    <h2> Colocar sello </h2> <br><br>
+    <button class="button" ion-button (click)="goToScanner('scanPassport')">
+      <ion-icon name="qr-scanner"> &nbsp; &nbsp; </ion-icon> Escanear pasaporte
+    </button>
+    <br><br>
+    <ion-item>    
+        <ion-label stacked>ID del  pasaporte</ion-label> 
+        <ion-input type="text" placeholder="0x00123" [(ngModel)]="requestInfo.passportID" disabled="true" name="bigStamp"></ion-input>
+    </ion-item>
+    <br><br>
+    <button class="button" ion-button (click)="goToScanner('scanProduct')">
+      <ion-icon name="qr-scanner"> &nbsp; &nbsp; </ion-icon> Escanear producto
+    </button>
+    <br><br>
+    <form (ngSubmit)="sendStampRequest()">
+      <h5>Sellos</h5>
+      <ion-item>    
+        <ion-label stacked>Donación</ion-label>
+        <ion-toggle [(ngModel)]="requestInfo.isDonation" (click)="disableSmall()" name="isDonation" ></ion-toggle>
+      </ion-item>
+
+      <ion-item>
+        <ion-input type="text" disabled placeholder={{placeholder()}} [(ngModel)]="requestInfo.entrepreneurs" (click)="eModal()" name="entrepreneur"></ion-input>
+      </ion-item>
+      <ion-item>    
+        <ion-label stacked id="kind" [hidden]="!requestInfo.isDonation">Corazones</ion-label>
+        <ion-label stacked id="kind" [hidden]="requestInfo.isDonation">Grandes</ion-label>
+        <ion-input placeholder="0" type="number" min=0 max=10 [(ngModel)]= "requestInfo.bigStamps" name="bigStamps"></ion-input>
+      </ion-item>
+      <ion-item id="smallStamps" [hidden]="requestInfo.isDonation">    
+        <ion-label stacked>Pequeños</ion-label>
+        <ion-input placeholder="0" type="number" min=0 max=10  [(ngModel)]= "requestInfo.smallStamps" name="smallStamps" ></ion-input>
+      </ion-item>
+      <br>
+      <ion-item id="socialStamps" [hidden]="requestInfo.isDonation">    
+        <ion-label stacked>Redes Sociales</ion-label>
+        <ion-toggle [(ngModel)]="requestInfo.socialStamps" name="socialStamps"></ion-toggle>
+      </ion-item>
+      
+      <br><br>
+      <button ion-button type="submit" [disabled]="sending || !valid()">Colocar Sellos</button>
+      <br><br>
+    </form>
+  </div>
 </ion-content> 
 

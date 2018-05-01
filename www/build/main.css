@@ -25687,27 +25687,87 @@ ion-navbar.toolbar {
   background: none transparent !important;
 }
 
-index {
-  /* resize images */
+.toolbar-background {
+  background-color: #1c75bc;
 }
 
-index table, index th, index td {
-  border: 1px solid black;
+.title-dash > div.toolbar-background {
+  background-image: url("../assets/imgs/dash_logo_s.png") !important;
+  background-repeat: no-repeat;
+  background-size: 100px;
+  background-position: center;
+}
+
+.button {
+  background-color: #1c75bc;
+}
+
+.toolbar-title {
+  color: white;
+}
+
+.bar-button-menutoggle, .back-button {
+  color: white;
+}
+
+page-entrepreneurs ion-content, page-entrepreneurs body, page-entrepreneurs .app-root, page-entrepreneurs ion-app, page-entrepreneurs .scroll-content, page-entrepreneurs .fixed-content, page-entrepreneurs page-app {
+  background: none !important;
+}
+
+page-entrepreneurs .searchbar-clear-icon, page-entrepreneurs .searchbar-md-cancel {
+  background-color: white !important;
+}
+
+page-index .firstDiv {
+  display: table;
+  width: 100%;
+  height: 100%;
+}
+
+page-login .firstDiv {
+  display: table;
+  padding: 10%;
+  width: 100%;
+  height: 100%;
+}
+
+passport table, passport th, passport td {
+  border: 0.7vh solid black;
   max-width: 80vh;
 }
 
-index td {
+passport .swiper-slide {
+  overflow-y: scroll;
+  display: block;
+}
+
+passport .test-class > img {
+  width: 45vh;
+}
+
+passport td {
   width: 10vh;
   height: 10vh;
 }
 
-index img {
-  width: 90%;
-  height: 90%;
-  background: transparent !important;
+passport .green {
+  color: green;
 }
 
-ion-content, body, .app-root, ion-app, .scroll-content, .fixed-content, page-app {
+passport .red {
+  color: red;
+}
+
+passport .blue {
+  color: blue;
+}
+
+page-profile td {
+  height: 60px;
+  min-width: 10vh;
+}
+
+ion-content.scanner, body, .app-root, ion-app, .scroll-content, page-app {
   background: none transparent !important;
 }
 
@@ -25731,6 +25791,10 @@ page-stamp hr {
   display: block !important;
   font-size: 2em !important;
   visibility: visible !important;
+}
+
+page-stamp .item-toggle > .item-inner {
+  border-bottom-color: white !important;
 }
 
 page-stamp .select {

@@ -1,22 +1,65 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { NavController, NavParams } from 'ionic-angular';
+import { HttpClient } from '@angular/common/http';
+import { PassportPage } from '../passport/passport'
+import { apiUrl } from "../../config"
 
-/**
- * Generated class for the IndexComponent component.
- *
- * See https://angular.io/api/core/Component for more info on Angular
- * Components.
- */
+
 @Component({
-  selector: 'index',
-  templateUrl: 'index.html'
+  selector: 'page-index',
+  templateUrl: 'index.html',
 })
-export class IndexPage {
-
-  local(item){
-    console.log(item, localStorage.getItem(item))
-    return localStorage.getItem(item)
+export class IndexPage implements OnInit {
+  
+  events : any;
+  closedEvents : any;
+  constructor(public navCtrl: NavController, public navParams: NavParams,
+              private http : HttpClient) {
   }
-  constructor() {
+
+  ngOnInit(){
+    const id = localStorage.getItem("id")
+    this.http.get(apiUrl + "/user/" + id + "/events").subscribe(
+      data => {
+        this.events = []
+        this.closedEvents = []
+        console.log(data)
+        if (data["success"]) {
+          for (var i = 0 ; i < data["user_events"].length ; i++) {
+            const event = data["user_events"][i]
+             if (event['active']){
+               this.events.push(event)
+             } else {
+               this.closedEvents.push(event)
+             }
+           } 
+        } else {
+          alert(data["message"])
+        }
+        console.log(this.events)
+      }, err =>{
+        alert("No se puedo conectar con el servidor.")
+      }
+    )
+  }
+  ionViewDidLoad() {
+    console.log('ionViewDidLoad IndexPage');
+  }
+  
+  formatDate(date) {
+
+    var d = new Date(date*1000),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) month = '0' + month;
+    if (day.length < 2) day = '0' + day;
+
+    return [day, month, year].join('/');
   }
 
+  goToPassport(id, duff_value){
+    this.navCtrl.push(PassportPage, {id: id, duff_value: parseFloat(duff_value)})
+  }
 }

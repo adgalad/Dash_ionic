@@ -1,0 +1,65 @@
+<ion-header>
+  <ion-navbar class="title-dash">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title class="title">
+    </ion-title>
+    <ion-buttons end>
+      <button ion-button (click)="refresh()">
+        <ion-icon name="refresh" style="color:white; font-size: 6vh"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+  
+
+  <ion-slides pager="true" style="height: 100%">
+    <ion-slide class="slide-zoom">
+
+      <div class="center">
+        <!-- <img src="{{qrUrl}}"><br> -->
+        <ngx-qrcode qrc-class = "test-class" [qrc-value]="qrInfo"></ngx-qrcode>
+        <h5> Estado del pasaporte: </h5> 
+          <div [innerHTML]="status"></div>
+        <h5> Primera Recarga: </h5> {{firstRecharge()}}
+        <h5> Segunda Recarga: </h5> {{secondRecharge()}}
+      </div>
+      <br>
+      <br>
+    </ion-slide>
+    <ion-slide>
+      <div >
+        Su próxima recarga será de:
+        <br>
+        {{ rechargeValue() }} DASH
+        <br>
+        <table align="center">
+          <tr>
+            <td [innerHTML]="grid[0]" id="0"></td>
+            <td [innerHTML]="grid[1]" id="1"></td>
+            <td [innerHTML]="grid[2]" id="2"></td>
+            <td [innerHTML]="grid[3]" id="3"></td>
+          </tr>
+          <tr>
+            <td [innerHTML]="grid[4]" id="4"></td>
+            <td [innerHTML]="grid[5]" id="5"></td>
+            <td [innerHTML]="grid[6]" id="6"></td>
+            <td [innerHTML]="grid[7]" id="7"></td>
+          </tr>
+          <tr>
+            <td [innerHTML]="grid[8]" id="8"></td>
+            <td [innerHTML]="grid[9]" id="9"></td>
+            <td [innerHTML]="grid[10]" id="10"></td>
+            <td [innerHTML]="grid[11]" id="11"></td>
+          </tr>
+        </table>
+      </div>
+    </ion-slide>
+
+  </ion-slides>
+
+</ion-content>

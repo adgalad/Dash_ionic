@@ -1,4 +1,4 @@
-<ion-menu [content]="content">
+<ion-menu [content]="content" swipeEnabled="false">
 
   <ion-header>
     <ion-toolbar>
@@ -8,13 +8,31 @@
 
   <ion-content>
     <ion-list>
-      <button ion-item *ngFor="let p of pageKeys()" (click)="openPage(p)">
-        {{pages[p].title}}
+      <button ion-item (click)="openPage(pages['login'].component)">
+        {{pages["login"].title}}
       </button>
+
+      <button ion-item (click)="openPage(pages['profile'].component)">
+        {{pages["profile"].title}}
+      </button>
+
+      <button *ngIf="hasPermission('canStamp')" ion-item (click)="openPage(pages['stamp'].component)">
+        {{pages["stamp"].title}}
+      </button>
+
+      <button *ngIf="hasPermission('canActivate')" ion-item (click)="openPage(pages['activate'].component)">
+        {{pages["activate"].title}}
+      </button>
+
+      <button *ngIf="hasPermission('canRecharge')" ion-item (click)="openPage(pages['recharge'].component)">
+        {{pages["recharge"].title}}
+      </button>
+
 
       <button ion-item (click)="logout()">
         Salir
       </button>
+
     </ion-list>
   </ion-content>
 

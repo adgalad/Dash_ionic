@@ -10,7 +10,7 @@ module.exports = Object.assign(existingConfig, {
     dest: '{{WWW}}/assets/fonts'
   },
   copyFontawesomeCss: {
-    src: ['{{ROOT}}/node_modules/font-awesome/css/font-awesome.min.css'],
+    src: ['{{ROOT}}/node_modules/font-awesome/css/fontawesome-all.min.css'],
     dest: '{{WWW}}/assets/css'
   }
 })

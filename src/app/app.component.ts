@@ -5,8 +5,8 @@ import { Platform, MenuController, Nav } from 'ionic-angular';
 import { LoginPage } from '../pages/login/login';
 import { StampPage } from '../pages/stamp/stamp';
 import { ActivatePage } from '../pages/activate/activate';
-import { SignupPage } from '../pages/signup/signup';
 import { ProfilePage } from '../pages/profile/profile';
+import { RechargePage } from '../pages/recharge/recharge';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -30,6 +30,7 @@ export class MyApp {
   pageKeys() : Array<string> {
     return Object.keys(this.pages);
   }
+
   constructor(
     public platform: Platform,
     public menu: MenuController,
@@ -37,17 +38,22 @@ export class MyApp {
     public splashScreen: SplashScreen
   ) {
     this.initializeApp();
+    this.menu.swipeEnable(false)
     // set our app's pages
-    this.pages.login = { title: 'Mi Pasaporte', component: LoginPage }
-    this.pages.profile = { title: 'Perfil', component: ProfilePage }
-    if (this.isAmbassador()) {
-      this.pages.stamp = { title: 'Colocar Sellos', component: StampPage}
-      this.pages.activate = { title: 'Activar pasaporte', component: ActivatePage}
+    this.pages = {
+      login: { title: 'Eventos', component: LoginPage },
+      profile: { title: 'Perfil', component: ProfilePage },
+      stamp: { title: 'Colocar Sellos', component: StampPage},
+      activate: { title: 'Activar pasaporte', component: ActivatePage},
+      recharge: { title: 'Recargar pasaporte', component: RechargePage}
     }
   }
 
-  isAmbassador(){
-    return parseInt(localStorage.getItem("type")) === 2;
+  hasPermission(name){
+    const permissions = JSON.parse(localStorage.getItem("permissions"))
+    if (!permissions)
+      return false
+    return permissions[name]
   }
 
   initializeApp() {
@@ -57,9 +63,10 @@ export class MyApp {
     });
   }
 
-  openPage(url) {
+  openPage(component) {
     this.menu.close();
-    this.nav.setRoot(this.pages[url].component);
+    this.nav.setRoot(component);
+    
   }
 
   logout(){
@@ -70,7 +77,7 @@ export class MyApp {
     localStorage.removeItem('firstName');
     localStorage.removeItem('lastName');
     localStorage.removeItem('id');
-    localStorage.removeItem('type');
+    localStorage.removeItem('permissions');
     
     this.nav.setRoot(LoginPage); 
   }

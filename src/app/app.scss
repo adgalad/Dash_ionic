@@ -24,3 +24,28 @@
   display: none !important;
   background: none transparent !important;
 }
+
+.toolbar-background {
+  background-color: #1c75bc;
+}
+
+.title-dash > div.toolbar-background {
+  background-image: url("../assets/imgs/dash_logo_s.png") !important;
+  background-repeat: no-repeat;
+  background-size: 100px;
+  background-position: center;
+}
+
+.button {
+  background-color: #1c75bc
+}
+
+.toolbar-title {
+  color:white;
+}
+
+.bar-button-menutoggle, .back-button {
+  color:white;
+}
+
+

@@ -2,6 +2,7 @@ page-scanner {
   
 }
 
-ion-content,body, .app-root, ion-app,.scroll-content,.fixed-content,page-app {
+// 
+ ion-content.scanner, body,.app-root,ion-app,.scroll-content,page-app {
    background: none transparent !important;
-}
+  }

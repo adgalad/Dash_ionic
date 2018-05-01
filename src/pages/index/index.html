@@ -1,73 +1,60 @@
+<!--
+  Generated template for the IndexPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
 <ion-header>
-  <ion-navbar>
+  <ion-navbar class="title-dash">
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title class="title">
-        Mi Pasaporte
     </ion-title>
+    <ion-buttons end>
+      <button ion-button (click)="navCtrl.setRoot(navCtrl.getActive().component);">
+        <ion-icon name="refresh" style="color:white; font-size: 6vh"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
 
-<ion-content padding no-bounce>
-  
+<ion-content padding>
+  <div align="center" class="firstDiv">
 
-  <ion-slides pager="true">
-    <ion-slide>
-      <div class="center">
-        <ion-img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=7712b3g1236123bb3hhj12j3jbb312j331b23213"></ion-img><br>
-        <h5> Estado del pasaporte: </h5> <b style="color:green">ACTIVO</b>
-        <h5> Primera Recarga: </h5> 0.01712 DASH
-        <h5> Segunda Recarga: </h5> -
-      </div>
-    </ion-slide>
-    <ion-slide>
-        <table align="center">
-          <tr>
-            <td id="1">
-              <ion-img src="assets/imgs/dash_circle_normal-1.png"></ion-img>
-            </td>
-            <td id="2">
-              <ion-img src="assets/imgs/dash_circle_normal-1.png"></ion-img>
-            </td>
-            <td id="3">
-              <ion-img src="assets/imgs/dash_circle_normal-1.png"></ion-img>
-            </td>
-            <td id="4">
-              <ion-img src="assets/imgs/dash_circle_normal-1.png"></ion-img>
-            </td>
-          </tr>
-          <tr>
-            <td id="5">
-              <ion-img src="assets/imgs/dash_circle_normal-1.png"></ion-img>
-            </td>
-            <td id="6">
-              <ion-img src="assets/imgs/dash_heart.png"></ion-img>
-            </td>
-            <td id="7"></td>
-            <td id="8"></td>
-          </tr>
-          <tr>
-            <td id="9"></td>
-            <td id="10"></td>
-            <td id="11"></td>
-            <td id="12"></td>
-          </tr>
-          <tr>
-            <td id="13"></td>
-            <td id="14"></td>
-            <td id="15"></td>
-            <td id="16"></td>
-          </tr>
-          <tr>
-            <td id="17"></td>
-            <td id="18"></td>
-            <td id="19"></td>
-            <td id="20"></td>
-          </tr>
-        </table>
-    </ion-slide>
+    <div style="top:10vh; display: table-cell;" class="bg">
+      <h3>
+          Eventos
+      </h3>
+      <h3 *ngIf="events !== undefined && events.length === 0" style="color:grey">No estas invitado a ningún evento aún</h3>
+      <ion-list>
+        <div *ngFor="let event of events">
+          <ion-item>
+            <b>{{event.name}}</b><br>
+            {{event.location}}<br>
+            {{formatDate(event.date)}}
+            <button style="height:10vh;" ion-button item-end (click)="goToPassport(event.passport_id, event.duff_value)" >Ver pasaporte</button>
+          </ion-item>
+        </div>
+      </ion-list>
+      <br><br>
+      <h3>
+          Eventos pasados
+      </h3>
+      <h3 *ngIf="closedEvents !== undefined && closedEvents.length === 0" style="color:grey">No has participado en otros eventos</h3>
+      <ion-list>
+        <div *ngFor="let event of closedEvents">
+          <ion-item>
+            <b>{{event.name}}</b><br>
+            {{event.location}}<br>
+            {{formatDate(event.date)}}<br>
+            <b style="color:red">Terminado</b>
+            <button style="height:10vh;" ion-button item-end (click)="goToPassport(event.passport_id, event.duff_value)" >Ver pasaporte</button>
+          </ion-item>
+        </div>
+      </ion-list>
+    </div>
+  </div>
 
-  </ion-slides>
 </ion-content>

@@ -1,0 +1,32 @@
+passport {
+
+  table, th, td {
+    border: 0.7vh solid black;
+    // width: 90%;
+    // height: 90%;
+    max-width: 80vh;
+  }
+ .swiper-slide { overflow-y: scroll; display: block; }
+  
+  .test-class > img {
+    width: 45vh;
+  }
+  td {
+      width: 10vh;
+      height: 10vh;
+  }
+
+  .green{
+    color:green;
+  }
+
+  .red{
+    color:red;
+  }
+
+  .blue{
+    color:blue;
+  }
+
+
+}

@@ -6,7 +6,6 @@ import { AlertController } from 'ionic-angular';
 
 import { IndexPage } from '../index/index';
 import { SignupPage } from '../signup/signup';
-import * as $ from 'jquery'
 
 export function validateEmail(email) {
   var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -39,12 +38,19 @@ export class LoginPage implements OnInit{
   }
 
   ngOnInit(){
+    const style = (<HTMLElement> document.getElementsByClassName("fixed-content")[1]);
+    style.innerHTML="<div style='display:table; height:101%; width:100%'> <div style='display: table-cell; vertical-align: bottom;'> <img style='max-height:35%;' src='assets/imgs/bg.png' width='100%' > </div></div>"
     if (this.isLogged()){
       this.goToIndex()
     } 
   }
+    
 
-  validInfo(){
+  ionViewWillEnter(){
+    
+  }
+
+  validInfo(){    
     return (validateEmail(this.credentials.email) && this.credentials.password);
   }
 
@@ -83,6 +89,7 @@ export class LoginPage implements OnInit{
     console.log(this.credentials)
     
     if (this.validInfo()){
+      (<HTMLInputElement> document.getElementById("submit")).disabled = true
       this.credentials.email = String(this.credentials.email).toLowerCase()
       this.http.post(apiUrl + '/auth/user', this.credentials).subscribe( 
         data =>{
@@ -92,11 +99,13 @@ export class LoginPage implements OnInit{
             localStorage.setItem('firstName', data['firstName']);  
             localStorage.setItem('lastName', data['lastName']);
             localStorage.setItem('id', data['id']);
-            localStorage.setItem('type', data['type'])
+            localStorage.setItem('permissions', JSON.stringify(data['permissions']));
             localStorage.setItem('token', data['token']);  
+
             this.goToIndex()  
           }
           else {
+            (<HTMLInputElement> document.getElementById("submit")).disabled = false
             switch (data['code']) {
               case 2:
                 this.activationAlert()
@@ -109,6 +118,7 @@ export class LoginPage implements OnInit{
             
           }
         }, err=>{
+          (<HTMLInputElement> document.getElementById("submit")).disabled = false
           alert("No se puedo realizar la conexión.\nPor favor intente mas tarde.")
         }
       )

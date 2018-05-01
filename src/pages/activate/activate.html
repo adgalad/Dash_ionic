@@ -5,28 +5,45 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-  <ion-navbar>
+  <ion-navbar class="title-dash">
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title class="center title">
-      Activar Pasaporte
     </ion-title>
   </ion-navbar>
 </ion-header>
 
 
 <ion-content padding>
+
   <div class="container" style="position:absolute; left: 10%; top:30px;  width:80%">
-    <div id="request-form"> 
-        <button class="button" ion-button (click)="goToScanner('scanPassport')">
-          <ion-icon name="qr-scanner"> &nbsp; &nbsp; </ion-icon> Escanear pasaporte
-        </button>
-      <br><br>
-      <ion-item>    
-        <ion-label stacked>ID del pasaporte</ion-label> 
-        <ion-input type="text" placeholder="0x00123" [(ngModel)]="requestInfo.passportID" disabled="true" name="passportID"></ion-input>
-      </ion-item>
-    </div>
+    <h2> Activar pasaporte </h2> <br><br>
+    <button class="button" ion-button (click)="goToScanner('scanPassport')">
+      <ion-icon name="qr-scanner"> &nbsp; &nbsp; </ion-icon> Escanear pasaporte
+    </button>
+    <br><br>
+    <ion-item>    
+      <ion-label stacked>ID del pasaporte</ion-label> 
+      <ion-input type="number" placeholder="0" [(ngModel)]="passportID" disabled="true" name="passportID"></ion-input>
+    </ion-item>
+    <ion-item>    
+      <ion-label stacked>Cédula</ion-label> 
+      <ion-input type="text" placeholder="-" [(ngModel)]="id" disabled="true" name="id"></ion-input>
+    </ion-item>
+    <ion-item>    
+      <ion-label stacked>Nombre</ion-label> 
+      <ion-input type="text" placeholder="-" [(ngModel)]="firstName" disabled="true" name="firstName"></ion-input>
+    </ion-item>
+    <ion-item>    
+      <ion-label stacked>Apellido</ion-label> 
+      <ion-input type="text" placeholder="-" [(ngModel)]="lastName" disabled="true" name="lastName"></ion-input>
+    </ion-item>
+    <ion-item>    
+      <ion-label stacked>Recarga de DASH ({{first_recharge/duff_value}} sellos)</ion-label> 
+      <ion-input type="number"  [(ngModel)]="first_recharge" [disabled]="!passportID" name="lastName"></ion-input>
+    </ion-item>
+    <br><br>
+    <button ion-button (click)="activate()" [disabled]="passportID === 0 || sending">Activar pasaporte</button>
   </div>
 </ion-content>
