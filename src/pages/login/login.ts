@@ -6,6 +6,7 @@ import { AlertController } from 'ionic-angular';
 
 import { IndexPage } from '../index/index';
 import { SignupPage } from '../signup/signup';
+import { SignUpVendorPage } from '../sign-up-vendor/sign-up-vendor';
 
 export function validateEmail(email) {
   var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -101,6 +102,9 @@ export class LoginPage implements OnInit{
             localStorage.setItem('id', data['id']);
             localStorage.setItem('permissions', JSON.stringify(data['permissions']));
             localStorage.setItem('token', data['token']);  
+            if (data['vendor_id']){
+              localStorage.setItem('vendor_id', data['vendor_id']);  
+            }
 
             this.goToIndex()  
           }
@@ -127,5 +131,9 @@ export class LoginPage implements OnInit{
 
   signUp(){
     this.navCtrl.push(SignupPage);
+  }
+
+  signUpVendor(){
+    this.navCtrl.push(SignUpVendorPage)
   }
 }

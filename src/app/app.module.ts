@@ -20,10 +20,13 @@ import { StampPageModule } from '../pages/stamp/stamp.module';
 import { ScannerPageModule } from '../pages/scanner/scanner.module';
 import { ActivatePageModule } from '../pages/activate/activate.module';
 import { SignupPageModule } from '../pages/signup/signup.module';
+import { SignUpVendorPageModule } from '../pages/sign-up-vendor/sign-up-vendor.module';
 import { ProfilePageModule } from '../pages/profile/profile.module';
 import { EntrepreneursPageModule } from '../pages/entrepreneurs/entrepreneurs.module'
 import { PassportPageModule } from '../pages/passport/passport.module'
 import { RechargePageModule } from '../pages/recharge/recharge.module';
+import { ProductPageModule } from '../pages/product/product.module';
+import { SellsPageModule } from '../pages/sells/sells.module';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -58,10 +61,13 @@ import { HttpClientModule } from '@angular/common/http';
     ScannerPageModule,
     ActivatePageModule,
     SignupPageModule,
+    SignUpVendorPageModule,
     ProfilePageModule,
     EntrepreneursPageModule,
     PassportPageModule,
-    RechargePageModule
+    RechargePageModule,
+    ProductPageModule,
+    SellsPageModule,
   ],
   bootstrap: [IonicApp],
   entryComponents: [

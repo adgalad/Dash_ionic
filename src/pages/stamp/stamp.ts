@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { apiUrl } from '../../config'
 
 import { ScannerPage } from "../scanner/scanner"
+import { SellsPage } from "../sells/sells"
 /**
  * Generated class for the StampPage page.
  *
@@ -12,14 +13,13 @@ import { ScannerPage } from "../scanner/scanner"
  * Ionic pages and navigation.
  */
 interface info {
-  passportID : number,
-  bigStamps : number,
-  smallStamps : number,
-  isDonation : boolean,
-  socialStamp : boolean,
-  entrepreneurs: string,
+  client_id : number,
   vendor_id : number,
   event_id : number;
+  products: any;
+  selected: any;
+  amount: any;
+  total: number;
 }
 
 @IonicPage()
@@ -33,21 +33,42 @@ export class StampPage {
   requestInfo : info;
   
   sending: boolean;
-
   constructor(public navCtrl: NavController, public navParams: NavParams,
               public modalCtrl: ModalController, private http: HttpClient) {
+    console.log(this.navParams.get("event"))
+    console.log(this.navParams.get("passport"))
+    var id = localStorage.getItem('vendor_id')
     this.requestInfo = {
-      "passportID": 0,
-      "bigStamps": null,
-      "smallStamps": null,
-      "isDonation": false,
-      "socialStamp": false,
-      "entrepreneurs": "",
-      "vendor_id": 0,
-      "event_id": 0
+      "client_id": null,
+      "vendor_id": parseInt(id),
+      "event_id": this.navParams.get("event"),
+      "products" : {}, 
+      "selected": [],
+      "amount": {},
+      "total": 0
     }
   }
+  ngOnInit(){
+    var token = localStorage.getItem('token')
+    var id = localStorage.getItem('vendor_id')
+    this.http.get(apiUrl + "/vendor/"+ id +"/products", {headers: {"Authorization":"Bearer "+token}}).subscribe(
+      data => {
 
+        if (data['success']){
+          var products = {}
+          for (var i = 0 ; i < data['products'].length ; ++i){
+            products[data['products'][i]['name']] = data['products'][i]['price']
+          }
+          console.log(">>>", products)
+          this.requestInfo['products'] = products
+        } else {
+          alert(data["message"])
+        }
+      }, err =>{
+        alert("No se pudo conectar al servidor")
+      }
+    )
+  }
   goToScanner(operation){
     this.navCtrl.push(ScannerPage, {"operation": operation})
   }
@@ -55,16 +76,20 @@ export class StampPage {
   ionViewWillEnter(){
     try {
       var qrInfo = JSON.parse(localStorage.getItem("qrInfo"))
-      this.requestInfo.passportID = parseInt(qrInfo["passportID"]);
+      this.requestInfo.client_id = parseInt(qrInfo["id"]);
       this.requestInfo.event_id = parseInt(qrInfo["event_id"]);
+      
+
       localStorage.removeItem("qrInfo")
     } catch (e) {
-        this.requestInfo.passportID = 0;
+        this.requestInfo.client_id = 0;
+        this.requestInfo.event_id = parseInt(this.navParams.get("passport"));
     }
   }
   
   valid(){
-    return this.requestInfo.passportID !== 0 
+    var idRE = /^[1-9][0-9]*$/;
+    return idRE.test(String(this.requestInfo.client_id))
         // && this.requestInfo.bigStamps !== null 
         // && this.requestInfo.smallStamps !== null 
         // && (this.requestInfo.bigStamps + this.requestInfo.smallStamps !== 0 || this.requestInfo.socialStamp) 
@@ -74,32 +99,36 @@ export class StampPage {
 
   sendStampRequest(){
     this.sending = true
+
     const request = {
-      id:this.requestInfo.passportID,
-      stamps: this.requestInfo.bigStamps*1 + (this.requestInfo.smallStamps*0.25),
-      vendor_id: this.requestInfo.vendor_id
+      event_id: this.requestInfo.event_id,
+      vendor_id: this.requestInfo.vendor_id,
+      client_id: this.requestInfo.client_id,
+      value: this.requestInfo.total,
+      products: JSON.stringify(this.requestInfo.amount)
+
     }
-    if (this.requestInfo.isDonation){
-      request["isDonation"] = true
+    for (var key in this.requestInfo.amount) {
+      if (this.requestInfo.amount[key] <= 0){
+        this.sending = false
+        return alert("La cantidad de un productos no puede ser cero.")
+      }
     }
-    if (this.requestInfo.socialStamp){
-      request["socialStamp"] = true
-    }
+    
     const token = localStorage.getItem("token")
-    this.http.post(apiUrl + "/passport/stamp", request, {headers: {"Authorization":"Bearer "+token}}).subscribe(
+    this.http.post(apiUrl + "/vendor/registerSell", request, {headers: {"Authorization":"Bearer "+token}}).subscribe(
       data => {
         if (data['success']){
           alert("Se colocaron los sellos exitosamente.")
           
           this.requestInfo = {
-            "passportID": 0,
-            "bigStamps": null,
-            "smallStamps": null,
-            "isDonation": false,
-            "socialStamp": false,
-            "entrepreneurs": "",
-            "vendor_id": 0,
-            "event_id": 0
+            "client_id": 0,
+            "vendor_id": this.requestInfo['vendor_id'],
+            "event_id": this.navParams.get("passport"),
+            "products": this.requestInfo['products'],
+            "selected": [] ,
+            "amount": {},
+            "total": 0
           }
           this.sending = false
         } else {
@@ -117,41 +146,39 @@ export class StampPage {
     
   }
 
-  eModal(){
-    // if (!this.requestInfo.event_id){
-    //   alert("Primero debe escanear un qr de pasaporte valido.")
-    // } else {
-    const modalParams = {
-      event:1,
-      isFoundation: this.requestInfo.isDonation 
-    }
-    let entrepreneursModal = this.modalCtrl.create(EntrepreneursPage, modalParams);
-    entrepreneursModal.onDidDismiss(data => {
-      this.requestInfo.vendor_id = data['vendor_id']
-      this.requestInfo.entrepreneurs = data['name']
-    });
-    entrepreneursModal.present();
-    // }
+  viewSells(){
+    this.navCtrl.push(SellsPage)
   }
-  
-  disableSmall(){
-    this.requestInfo = {
-      "passportID": 0,
-      "bigStamps": null,
-      "smallStamps": null,
-      "isDonation": false,
-      "socialStamp": false,
-      "entrepreneurs": "",
-      "vendor_id": 0,
-      "event_id": 0
+
+  replace(name){
+    return name.replace(" ","_") + "item"
+  }
+
+  total(){
+    this.requestInfo.total = 0 
+    for (var i = 0; i < this.requestInfo.selected.length; ++i) {
+      var amount = parseFloat((<HTMLInputElement>document.getElementById(this.replace(this.requestInfo.selected[i]))).value)
+      if (!amount || amount < 0){
+        (<HTMLInputElement>document.getElementById(this.replace(this.requestInfo.selected[i]))).value = "0"
+        amount = 0;
+      }
+      this.requestInfo.total += this.requestInfo.products[this.requestInfo.selected[i]] * amount
+      this.requestInfo.amount[this.requestInfo.selected[i]] = amount
     }
-  }  
-  placeholder(){
-    if (this.requestInfo.isDonation){
-      return "Fundación"
-    } else {
-      return "Emprendedor"
+    document.getElementById("total").innerHTML = "<b>Total: " + Number(this.requestInfo.total.toFixed(6))+" ᕭ</b>";
+    return this.requestInfo.total;
+  }
+
+  selected(){
+    if (this.requestInfo && this.requestInfo.selected !== []){
+      return this.requestInfo.selected;
     }
-  }  
+    return []
+  }
+
+  keys(){
+    return Object.keys(this.requestInfo.products)
+  }
+
 }
 

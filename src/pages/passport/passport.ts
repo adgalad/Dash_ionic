@@ -15,6 +15,7 @@ export class PassportPage implements OnInit {
   status: string;
   qrInfo: string
   duff_value: number;
+  
 
   local(item){
     console.log(item, localStorage.getItem(item))

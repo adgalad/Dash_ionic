@@ -31,7 +31,7 @@
     "angular2-qrscanner": "^1.0.3",
     "cordova": "^7.1.0",
     "cordova-android": "~6.3.0",
-    "cordova-ios": "4.5.4",
+    "cordova-browser": "~5.0.3",
     "cordova-plugin-camera": "^4.0.2",
     "cordova-plugin-compat": "^1.2.0",
     "cordova-plugin-crosswalk-webview": "^2.4.0",
@@ -53,7 +53,7 @@
     "rxjs": "5.5.7",
     "sw-toolbox": "3.6.0",
     "zone.js": "0.8.20",
-    "cordova-browser": "~5.0.3"
+    "cordova-ios": "~4.5.4"
   },
   "devDependencies": {
     "@ionic/app-scripts": "3.1.8",
@@ -79,9 +79,9 @@
       }
     },
     "platforms": [
-      "ios",
       "android",
-      "browser"
+      "browser",
+      "ios"
     ]
   }
 }

@@ -7,6 +7,7 @@ import { StampPage } from '../pages/stamp/stamp';
 import { ActivatePage } from '../pages/activate/activate';
 import { ProfilePage } from '../pages/profile/profile';
 import { RechargePage } from '../pages/recharge/recharge';
+import { ProductPage } from '../pages/product/product';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -44,6 +45,7 @@ export class MyApp {
       login: { title: 'Eventos', component: LoginPage },
       profile: { title: 'Perfil', component: ProfilePage },
       stamp: { title: 'Colocar Sellos', component: StampPage},
+      product: { title: 'Productos', component: ProductPage},
       activate: { title: 'Activar pasaporte', component: ActivatePage},
       recharge: { title: 'Recargar pasaporte', component: RechargePage}
     }

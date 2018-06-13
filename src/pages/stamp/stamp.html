@@ -18,47 +18,65 @@
 <ion-content class="content" scroll="true" overflow-scroll="true">
 
   <div class="container" style="position:absolute; left: 10%; top:30px;  width:80%">
-    <h2> Colocar sello </h2> <br><br>
+    <button ion-button (click)="viewSells()">Ver ventas</button>
+    <h2> Registrar Compra </h2> <br><br>
     <button class="button" ion-button (click)="goToScanner('scanPassport')">
       <ion-icon name="qr-scanner"> &nbsp; &nbsp; </ion-icon> Escanear pasaporte
     </button>
     <br><br>
+    <form (ngSubmit)="sendStampRequest()">
     <ion-item>    
-        <ion-label stacked>ID del  pasaporte</ion-label> 
-        <ion-input type="text" placeholder="0x00123" [(ngModel)]="requestInfo.passportID" disabled="true" name="bigStamp"></ion-input>
+        <ion-label stacked>Cédula</ion-label> 
+        <ion-input type="number" pattern="[0-9]*" decimal="true" placeholder="22136549" [(ngModel)]="requestInfo.client_id" name="id"></ion-input>
     </ion-item>
-    <br><br>
+<!--     <br><br>
     <button class="button" ion-button (click)="goToScanner('scanProduct')">
       <ion-icon name="qr-scanner"> &nbsp; &nbsp; </ion-icon> Escanear producto
     </button>
-    <br><br>
-    <form (ngSubmit)="sendStampRequest()">
-      <h5>Sellos</h5>
-      <ion-item>    
-        <ion-label stacked>Donación</ion-label>
-        <ion-toggle [(ngModel)]="requestInfo.isDonation" (click)="disableSmall()" name="isDonation" ></ion-toggle>
-      </ion-item>
+    <br><br> -->
+    
 
+      <br>
       <ion-item>
-        <ion-input type="text" disabled placeholder={{placeholder()}} [(ngModel)]="requestInfo.entrepreneurs" (click)="eModal()" name="entrepreneur"></ion-input>
-      </ion-item>
-      <ion-item>    
-        <ion-label stacked id="kind" [hidden]="!requestInfo.isDonation">Corazones</ion-label>
-        <ion-label stacked id="kind" [hidden]="requestInfo.isDonation">Grandes</ion-label>
-        <ion-input placeholder="0" type="number" min=0 max=10 [(ngModel)]= "requestInfo.bigStamps" name="bigStamps"></ion-input>
-      </ion-item>
-      <ion-item id="smallStamps" [hidden]="requestInfo.isDonation">    
-        <ion-label stacked>Pequeños</ion-label>
-        <ion-input placeholder="0" type="number" min=0 max=10  [(ngModel)]= "requestInfo.smallStamps" name="smallStamps" ></ion-input>
+        <ion-label>Productos</ion-label>
+        <ion-select [(ngModel)]="requestInfo.selected" name="products" multiple="true">
+          <ion-option *ngFor="let name of keys()">{{name}}</ion-option>
+        </ion-select>
       </ion-item>
       <br>
-      <ion-item id="socialStamps" [hidden]="requestInfo.isDonation">    
-        <ion-label stacked>Redes Sociales</ion-label>
-        <ion-toggle [(ngModel)]="requestInfo.socialStamps" name="socialStamps"></ion-toggle>
-      </ion-item>
-      
+
+      <table *ngIf="requestInfo.selected.length>0">
+        <thead>
+          <tr>
+            <th align="left">Producto</th>
+            <th align="left">Precio</th>
+            <th align="left">Cantidad</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let a of selected()">
+            <td align="left" >{{a}}</td>
+            <td align="left" >{{requestInfo.products[a]}}</td>
+            <td align="left" class="input">
+
+              <input type="number"
+                     class="amount" 
+                     pattern="[0-9]*" 
+                     decimal="true" 
+                     (change)="total()" 
+                     value="1" 
+                     name="amount" 
+                     id="{{replace(a)}}">
+              <!-- </ion-input> -->
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <!-- <table class="table" id="table" style="min-width: 50%">
+      </table> -->
+      <p align="right" id="total" *ngIf="requestInfo.selected.length > 0"> {{total()}}</p>
       <br><br>
-      <button ion-button type="submit" [disabled]="sending || !valid()">Colocar Sellos</button>
+      <button ion-button type="submit" [disabled]="sending || !valid() ">Registrar compra</button>
       <br><br>
     </form>
   </div>

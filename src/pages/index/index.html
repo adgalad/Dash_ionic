@@ -34,7 +34,7 @@
             <b>{{event.name}}</b><br>
             {{event.location}}<br>
             {{formatDate(event.date)}}
-            <button style="height:10vh;" ion-button item-end (click)="goToPassport(event.passport_id, event.duff_value)" >Ver pasaporte</button>
+            <button style="height:10vh;" ion-button item-end (click)="goToPassport(event)" >Ver pasaporte</button>
           </ion-item>
         </div>
       </ion-list>
@@ -50,7 +50,7 @@
             {{event.location}}<br>
             {{formatDate(event.date)}}<br>
             <b style="color:red">Terminado</b>
-            <button style="height:10vh;" ion-button item-end (click)="goToPassport(event.passport_id, event.duff_value)" >Ver pasaporte</button>
+            <button style="height:10vh;" ion-button item-end (click)="goToPassport(event)" >Ver pasaporte</button>
           </ion-item>
         </div>
       </ion-list>

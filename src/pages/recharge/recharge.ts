@@ -29,7 +29,7 @@ export class RechargePage {
   passportID : any
   rechargeValue: string
   sending: boolean;
-  
+  consulted: boolean;
   
 
   goToScanner(operation){
@@ -62,7 +62,23 @@ export class RechargePage {
     }    
   }
 
-
+  consult(){
+    const token = localStorage.getItem("token")
+    this.http.get(apiUrl + "/passport/recharge/" + this.id + "/", {headers: {"Authorization":"Bearer "+token}}).subscribe(
+      data => {
+        if (data['success']){
+          alert("Pasaporte recargado exitosamente.")
+          this.sending = false
+        } else {
+          alert(data["message"])
+          this.sending = false
+        }
+      }, err =>{
+        alert("No se pudo conectar al servidor.")
+        this.sending = false
+      }
+    )
+  }
   recharge(){
     this.sending = true
     const token = localStorage.getItem("token")

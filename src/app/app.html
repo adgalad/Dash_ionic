@@ -20,6 +20,10 @@
         {{pages["stamp"].title}}
       </button>
 
+      <button *ngIf="hasPermission('canStamp')" ion-item (click)="openPage(pages['product'].component)">
+        {{pages["product"].title}}
+      </button>
+
       <button *ngIf="hasPermission('canActivate')" ion-item (click)="openPage(pages['activate'].component)">
         {{pages["activate"].title}}
       </button>

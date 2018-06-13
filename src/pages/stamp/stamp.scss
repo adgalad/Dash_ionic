@@ -14,6 +14,28 @@ page-stamp {
   .select{
     max-width: 100% !important;
   }
+
+  table {
+    width: 100%;
+    font-size: 16px;
+  }
+
+  th {
+    background-color:lightgrey;
+    height:30px;
+  }
+
+  input.amount {
+   width:60px;
+   text-align:center;
+  }
+
+  td{
+    height:30px;
+  }
+  p {
+    font-size: 18px;
+  }
 }
 
 

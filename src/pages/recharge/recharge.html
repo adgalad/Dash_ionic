@@ -23,12 +23,8 @@
     </button>
     <br><br>
     <ion-item>    
-      <ion-label stacked>ID del pasaporte</ion-label> 
-      <ion-input type="number" placeholder="0" [(ngModel)]="passportID" disabled="true" name="passportID"></ion-input>
-    </ion-item>
-    <ion-item>    
       <ion-label stacked>Cédula</ion-label> 
-      <ion-input type="text" placeholder="-" [(ngModel)]="id" disabled="true" name="id"></ion-input>
+      <ion-input type="number" pattern="[0-9]*" decimal="true" placeholder="Ej 21001234" [(ngModel)]="id" name="id"></ion-input>
     </ion-item>
     <ion-item>    
       <ion-label stacked>Nombre</ion-label> 
@@ -38,12 +34,14 @@
       <ion-label stacked>Apellido</ion-label> 
       <ion-input type="text" placeholder="-" [(ngModel)]="lastName" disabled="true" name="lastName"></ion-input>
     </ion-item>
-    <ion-item>
-      <ion-label stacked>Monto de recarga</ion-label> 
-      <ion-input type="text" placeholder="-" [(ngModel)]="rechargeValue" disabled="true" name="lastName"></ion-input>
-    </ion-item>
+    <button ion-button (click)="consult()" [disabled]="!id">Consultar</button>
+    <br>
+    <h5 stacked>Bono 1 <i class="fa fa-check"></i> </h5> 
+      
+    <h5 stacked>Bono 2 <i class="fa fa-check"></i> </h5> 
+      
     <br><br>
-    <button ion-button (click)="recharge()" [disabled]="passportID === 0">Recargar</button>
+    <button ion-button (click)="recharge()" [disabled]="!consulted">Recargar</button>
   </div>
 
 </ion-content>

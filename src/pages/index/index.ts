@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { HttpClient } from '@angular/common/http';
 import { PassportPage } from '../passport/passport'
+import { StampPage } from '../stamp/stamp'
 import { apiUrl } from "../../config"
 
 
@@ -59,7 +60,12 @@ export class IndexPage implements OnInit {
     return [day, month, year].join('/');
   }
 
-  goToPassport(id, duff_value){
-    this.navCtrl.push(PassportPage, {id: id, duff_value: parseFloat(duff_value)})
+  goToPassport(event){
+    const permissions = JSON.parse(localStorage.getItem('permissions'))
+    if (permissions['canStamp']){
+      this.navCtrl.push(StampPage, {passport:event.passport_id, event:event.id})  
+    } else {
+      this.navCtrl.push(PassportPage, {id: event.passport_id, duff_value: parseFloat(event.duff_value)})
+    }
   }
 }

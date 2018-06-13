@@ -1,0 +1,19 @@
+page-sign-up-vendor{
+  .danger {
+    color:red;
+  }
+  .error {
+    color: red;
+    max-width:35vh;
+  }
+
+  .item-toggle > .item-inner {
+    border-bottom-color: white !important;
+  }
+
+  td {
+    height: 60px;
+    text-align:center;
+  }
+
+}
